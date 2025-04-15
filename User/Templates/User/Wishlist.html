@@ -1,0 +1,22 @@
+{% extends 'User/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Your Wishlist</h1>
+    <div class="wishlist">
+        {% if wishlist %}
+            <ul class="list-group">
+                {% for item in wishlist %}
+                    <li class="list-group-item">
+                        <h3>{{ item.dish.dish_name }}</h3>
+                        <p>{{ item.dish.dish_description }}</p>
+                        <a href="{% url 'User:remove_from_wishlist' item.id %}" class="btn btn-danger btn-sm mt-2">Remove from Wishlist</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center">Your wishlist is empty.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

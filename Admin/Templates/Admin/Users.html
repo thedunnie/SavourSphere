@@ -1,0 +1,51 @@
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Users</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.user_name }}</td>
+                                <td>{{ user.user_email }}</td>
+                                <td>
+                                    {% if user.user_status == 2 %}
+                                    <span class="badge bg-danger">Blocked</span>
+                                    {% else %}
+                                    <span class="badge bg-success">Active</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.user_status == 0 %}
+                                    <a href="{% url 'Admin:block_user' user.id %}"
+                                        class="btn btn-danger btn-sm">Block</a>
+                                    {% else %}
+                                    <a href="{% url 'Admin:unblock_user' user.id %}"
+                                        class="btn btn-success btn-sm">Unblock</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

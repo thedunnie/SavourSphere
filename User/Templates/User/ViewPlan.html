@@ -1,0 +1,38 @@
+{% extends 'User/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Available Plans</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Plan Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Duration</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in plan %}
+                <tr>
+                    <td>{{ plan.plan_name }}</td>
+                    <td>{{ plan.plan_description }}</td>
+                    <td>{{ plan.plan_price }}</td>
+                    <td>{{ plan.plan_duration }}</td>
+                    <td>
+                        <a href="{% url 'User:subscription' plan.id %}" class="btn btn-primary btn-sm">Subscribe</a>
+
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No plans available at the moment.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

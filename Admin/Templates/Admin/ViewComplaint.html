@@ -1,0 +1,48 @@
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Complaints</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Complaint</th>
+                                <th>Reply</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for complaint in complaints %}
+                            <tr>
+                                <td>{{ complaint.complaint_text }}</td>
+                                <td>
+                                    {% if complaint.complaint_status == 1 %}
+                                    {{ complaint.complaint_reply }}
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if complaint.complaint_status == 0 %}
+                                    <a href="{% url 'Admin:reply' complaint.id %}"
+                                        class="btn btn-primary btn-sm">Reply</a>
+                                    {% else %}
+                                    <span class="badge bg-success">Replied</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Dish Types</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="mb-4">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input type="text" name="dishtype_name" class="form-control"
+                                    placeholder="Enter Dish Type Name" required>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-success w-100">Add Dish Type</button>
+                            </div>
+                        </div>
+                    </form>
+                    <h3 class="mb-3">Dish Type List</h3>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Dish Type Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dishtype in dishtypes %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ dishtype.dishtype_name }}</td>
+                                <td>
+                                    <a href="{% url 'Admin:update_dishtype' dishtype.id %}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'Admin:delete_dishtype' dishtype.id %}"
+                                        class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

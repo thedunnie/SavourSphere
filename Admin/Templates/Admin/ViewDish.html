@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dishes</title>
+    <style>
+        .description {
+            max-width: 300px;
+            display: inline-block;
+        }
+
+        .description.short {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .description.full {
+            white-space: normal;
+        }
+
+        .view-toggle {
+            color: #007bff;
+            cursor: pointer;
+            margin-left: 5px;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    {% extends 'Admin/Header.html' %}
+
+    {% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Dishes</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Dish Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for dish in dishes %}
+                                    <tr>
+                                        <td>{{ dish.dish_name }}</td>
+                                        <td>
+                                            {% if dish.dish_description|length > 100 %}
+                                            <div class="description short" id="desc-{{ dish.id }}">{{
+                                                dish.dish_description }}</div>
+                                            <span class="view-toggle" onclick="toggleDesc('desc-{{ dish.id }}')">View
+                                                more</span>
+                                            {% else %}
+                                            <div class="description">{{ dish.dish_description }}</div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if dish.dish_status == 1 %}
+                                            <span class="badge bg-danger">Blocked</span>
+                                            {% else %}
+                                            <span class="badge bg-success">Active</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if dish.dish_status == 0 %}
+                                            <a href="{% url 'Admin:blockdish' dish.id %}"
+                                                class="btn btn-danger btn-sm">Block</a>
+                                            {% else %}
+                                            <a href="{% url 'Admin:unblockdish' dish.id %}"
+                                                class="btn btn-success btn-sm">Unblock</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDesc(id) {
+            var desc = document.getElementById(id);
+            var toggle = desc.nextElementSibling;
+            if (desc.classList.contains('short')) {
+                desc.classList.remove('short');
+                desc.classList.add('full');
+                toggle.textContent = 'View less';
+            } else {
+                desc.classList.remove('full');
+                desc.classList.add('short');
+                toggle.textContent = 'View more';
+            }
+        }
+    </script>
+    {% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Dishes</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" class="mb-4">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="dish_name" class="form-label">Dish Name:</label>
+                                <input type="text" name="dish_name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="dish_photo" class="form-label">Photo:</label>
+                                <input type="file" name="dish_photo" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="dish_description" class="form-label">Description:</label>
+                                <textarea name="dish_description" class="form-control" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="dish_dishtype" class="form-label">Dish Type:</label>
+                                <select name="dish_dishtype" class="form-select">
+                                    {% for dishtype in dishtypes %}
+                                    <option value="{{ dishtype.dishtype_name }}">{{ dishtype.dishtype_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="dish_cuisine" class="form-label">Cuisine:</label>
+                                <select name="dish_cuisine" class="form-select">
+                                    {% for cuisine in cuisines %}
+                                    <option value="{{ cuisine.cuisine_name }}">{{ cuisine.cuisine_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Add Dish</button>
+                        </div>
+                    </form>
+                    <h3 class="mb-3">Dish List</h3>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Dish Type</th>
+                                <th>Cuisine</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dish in dishes %}
+                            <tr>
+                                <td><img src="{{ dish.dish_photo.url }}" alt="{{ dish.dish_name }}" width="100"
+                                        class="img-thumbnail"></td>
+                                <td>{{ dish.dish_name }}</td>
+                                <td>{{ dish.dish_description }}</td>
+                                <td>{{ dish.dish_type.dishtype_name }}</td>
+                                <td>{{ dish.cuisine.cuisine_name }}</td>
+                                <td>
+                                    <a href="{% url 'Admin:update_dish' dish.id %}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'Admin:delete_dish' dish.id %}"
+                                        class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="{% url 'Admin:ingredients' dish.id %}"
+                                        class="btn btn-info btn-sm">Ingredients</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

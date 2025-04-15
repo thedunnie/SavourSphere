@@ -1,0 +1,79 @@
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Ingredients for {{ dishes.dish_name }}</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" class="mb-4">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="ingredient_name" class="form-label">Name:</label>
+                                <input type="text" name="ingredient_name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ingredient_photo" class="form-label">Photo:</label>
+                                <input type="file" name="ingredient_photo" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="ingredient_description" class="form-label">Description:</label>
+                                <textarea name="ingredient_description" class="form-control" rows="3"
+                                    required></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ingredient_qty" class="form-label">Quantity:</label>
+                                <input type="text" name="ingredient_qty" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Add Ingredient</button>
+                        </div>
+                    </form>
+                    <h3 class="mb-3">Ingredient List</h3>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ingredient in ingredients %}
+                            <tr>
+                                <td>
+                                    {% if ingredient.ingredient_photo %}
+                                    <img src="{{ ingredient.ingredient_photo.url }}"
+                                        alt="{{ ingredient.ingredient_name }}" width="100" class="img-thumbnail">
+                                    {% else %}
+                                    No Image
+                                    {% endif %}
+                                </td>
+                                <td>{{ ingredient.ingredient_name }}</td>
+                                <td>{{ ingredient.ingredient_description }}</td>
+                                <td>{{ ingredient.ingredient_qty }}</td>
+                                <td>
+                                    <a href="{% url 'Admin:update_ingredients' ingredient.id %}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'Admin:delete_ingredients' ingredient.id %}"
+                                        class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

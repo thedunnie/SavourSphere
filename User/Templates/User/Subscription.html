@@ -1,0 +1,19 @@
+{% extends 'User/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Subscribe to a Plan</h1>
+    <form method="POST" class="card p-4 shadow">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="plan">Select a Plan:</label>
+            <select name="plan" id="plan" class="form-control" required>
+                {% for plan in plans %}
+                    <option value="{{ plan.id }}">{{ plan.name }} - {{ plan.price }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block mt-3">Subscribe</button>
+    </form>
+</div>
+{% endblock %}

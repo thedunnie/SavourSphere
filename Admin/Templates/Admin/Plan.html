@@ -1,0 +1,71 @@
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Plans</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="mb-4">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="plan_name" class="form-label">Name:</label>
+                                <input type="text" name="plan_name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="plan_price" class="form-label">Price:</label>
+                                <input type="number" name="plan_price" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="plan_duration" class="form-label">Duration:</label>
+                                <input type="text" name="plan_duration" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="plan_description" class="form-label">Description:</label>
+                                <textarea name="plan_description" class="form-control" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Add Plan</button>
+                        </div>
+                    </form>
+                    <h3 class="mb-3">Plan List</h3>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Duration</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for plan in plans %}
+                            <tr>
+                                <td>{{ plan.plan_name }}</td>
+                                <td>{{ plan.plan_price }}</td>
+                                <td>{{ plan.plan_duration }}</td>
+                                <td>{{ plan.plan_description }}</td>
+                                <td>
+                                    <a href="{% url 'Admin:update_plan' plan.id %}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'Admin:delete_plan' plan.id %}"
+                                        class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

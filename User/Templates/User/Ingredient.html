@@ -1,0 +1,50 @@
+{% extends 'User/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Ingredients for {{ dishes.dish_name }}</h1>
+    <div class="card p-4 shadow">
+        <ul class="list-group">
+            {% for ingredient in ingredients %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ ingredient.ingredient_name }}</strong>: {{ ingredient.ingredient_description }} 
+                        (Quantity: {{ ingredient.ingredient_qty }})
+                        {% if ingredient.ingredient_photo %}
+                            <img src="{{ ingredient.ingredient_photo.url }}" alt="{{ ingredient.ingredient_name }}" class="img-thumbnail" style="width:100px;height:auto;">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <a href="{% url 'User:update_ingredient' ingredient.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{% url 'User:delete_ingredient' ingredient.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-center">No ingredients found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <h2 class="mt-5">Add New Ingredient</h2>
+    <form method="POST" enctype="multipart/form-data" class="card p-4 shadow mt-3">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="ingredient_name">Ingredient Name:</label>
+            <input type="text" id="ingredient_name" name="ingredient_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="ingredient_description">Description:</label>
+            <textarea id="ingredient_description" name="ingredient_description" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="ingredient_photo">Photo:</label>
+            <input type="file" id="ingredient_photo" name="ingredient_photo" class="form-control-file">
+        </div>
+        <div class="form-group">
+            <label for="ingredient_qty">Quantity:</label>
+            <input type="text" id="ingredient_qty" name="ingredient_qty" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Add Ingredient</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'User/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Recommended Dishes for You</h1>
+    <div class="card p-4 shadow">
+        {% if recommendations %}
+            <ul class="list-group">
+                {% for dish in recommendations %}
+                    <li class="list-group-item">
+                        <h3>{{ dish.dish_name }}</h3>
+                        <p>{{ dish.dish_description }}</p>
+                        {% if dish.dish_photo %}
+                            <img src="{{ dish.dish_photo.url }}" alt="{{ dish.dish_name }}" class="img-thumbnail" style="width: 150px; height: auto;">
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center">No recommendations available at this time.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

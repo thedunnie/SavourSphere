@@ -1,0 +1,52 @@
+{% extends 'Admin/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Cuisines</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="mb-4">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input type="text" name="cuisine_name" class="form-control"
+                                    placeholder="Enter Cuisine Name" required>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-success w-100">Add Cuisine</button>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Cuisine Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cuisine in cuisines %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ cuisine.cuisine_name }}</td>
+                                <td>
+                                    <a href="{% url 'Admin:update_cuisine' cuisine.id %}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="{% url 'Admin:delete_cuisine' cuisine.id %}"
+                                        class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

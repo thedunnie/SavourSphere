@@ -1,0 +1,33 @@
+{% extends 'User/Header.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Comment on Post</h1>
+    <div class="card shadow p-4">
+        <h2 class="mb-3">{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+
+        <form method="POST" enctype="multipart/form-data" class="mt-4">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="comment_content">Your Comment:</label>
+                <textarea id="comment_content" name="comment_content" class="form-control" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Submit Comment</button>
+        </form>
+    </div>
+
+    <div class="mt-5">
+        <h3>Previous Comments:</h3>
+        <ul class="list-group">
+            {% for comment in post.comments.all %}
+                <li class="list-group-item">
+                    <strong>{{ comment.user.username }}:</strong> {{ comment.comment_content }}
+                </li>
+            {% empty %}
+                <li class="list-group-item">No comments yet. Be the first to comment!</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
