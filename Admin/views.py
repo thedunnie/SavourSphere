@@ -2,16 +2,41 @@ from django.shortcuts import render,redirect
 from Admin.models import *
 from Guest.models import *
 from User.models import *
+from django.http import HttpResponse
+from datetime import datetime
+from django.db.models import Sum
+
 # Create your views here.
 
 def homepage(request):
-    return render(request, 'Admin/Homepage.html')
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
+    
+    # Total users
+    total_users = tbl_user.objects.count()
+    
+    # Total subscription amount
+    total_subscription_amount = tbl_subscription.objects.aggregate(
+        total=Sum('plan__plan_price')
+    )['total'] or 0
+    
+    # Total premium users
+    premium_users = tbl_user.objects.filter(user_status=1).count()
+    
+    context = {
+        'total_users': total_users,
+        'total_subscription_amount': total_subscription_amount,
+        'premium_users': premium_users,
+    }
+    return render(request, 'Admin/Homepage.html', context)
 
 def logout(request):
     del request.session['aid']
     return redirect('Guest:login')
 
 def admin(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
     if request.method == "POST":
         tbl_admin.objects.create(
             admin_name=request.POST.get('admin_name'),
@@ -21,9 +46,10 @@ def admin(request):
         return redirect('Admin:admin')
     else:
         return render(request, 'Admin/AdminReg.html')
-    
 
 def dishtype(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
     dishtypes = tbl_dishtype.objects.all()
     if request.method == "POST":
         tbl_dishtype.objects.create(
@@ -32,7 +58,7 @@ def dishtype(request):
         return redirect('Admin:dishtype')
     else:
         return render(request, 'Admin/Dishtype.html', {'dishtypes': dishtypes})
-    
+
 def delete_dishtype(request, id):
     dishtype = tbl_dishtype.objects.get(id=id)
     dishtype.delete()
@@ -46,8 +72,10 @@ def update_dishtype(request, id):
         return redirect('Admin:dishtype')
     else:
         return render(request, 'Admin/Dishtype.html', {'dishtype': dishtype})
-    
+
 def cuisine(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
     cuisines = tbl_cuisine.objects.all()
     if request.method == "POST":
         tbl_cuisine.objects.create(
@@ -56,7 +84,6 @@ def cuisine(request):
         return redirect('Admin:cuisine')
     else:
         return render(request, 'Admin/Cuisine.html', {'cuisines': cuisines})
-    
 
 def delete_cuisine(request, id):
     cuisine = tbl_cuisine.objects.get(id=id)
@@ -71,9 +98,10 @@ def update_cuisine(request, id):
         return redirect('Admin:cuisine')
     else:
         return render(request, 'Admin/Cuisine.html', {'cuisine': cuisine})
-    
 
 def dish(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
     dishtypes = tbl_dishtype.objects.all()
     cuisines = tbl_cuisine.objects.all()
     dishes = tbl_dish.objects.filter(user__isnull=True)
@@ -88,7 +116,7 @@ def dish(request):
         return redirect('Admin:dish')
     else:
         return render(request, 'Admin/Dish.html', {'dishtypes': dishtypes, 'cuisines': cuisines, 'dishes': dishes})
-    
+
 def delete_dish(request, id):
     dish = tbl_dish.objects.get(id=id)
     dish.delete()
@@ -111,9 +139,9 @@ def update_dish(request, id):
         return redirect('Admin:dish')
     else:
         return render(request, 'Admin/Dish.html', {'dish': dish, 'dishtypes': dishtypes, 'cuisines': cuisines})
-    
 
-def ingredient(request,id):
+def ingredient(request, id):
+    
     ingredients = tbl_ingredients.objects.filter(ingredient_dish__id=id)
     dishes = tbl_dish.objects.get(id=id)
     if request.method == "POST":
@@ -124,16 +152,18 @@ def ingredient(request,id):
             ingredient_dish=dishes,
             ingredient_qty=request.POST.get('ingredient_qty')
         )
-        return redirect('Admin:ingredients',id)
+        return redirect('Admin:ingredient', id)
     else:
         return render(request, 'Admin/Ingredient.html', {'ingredients': ingredients})
-    
+
 def delete_ingredient(request, id):
+    
     ingredient = tbl_ingredients.objects.get(id=id)
     ingredient.delete()
     return redirect('Admin:ingredient', ingredient.ingredient_dish.id)
 
 def update_ingredient(request, id):
+    
     ingredient = tbl_ingredients.objects.get(id=id)
     if request.method == "POST":
         ingredient.ingredient_name = request.POST.get('ingredient_name')
@@ -142,15 +172,15 @@ def update_ingredient(request, id):
             ingredient.ingredient_photo = request.FILES.get('ingredient_photo')
         else:
             ingredient.ingredient_photo = ingredient.ingredient_photo
-        
         ingredient.ingredient_qty = request.POST.get('ingredient_qty')
         ingredient.save()
         return redirect('Admin:ingredient', ingredient.ingredient_dish.id)
     else:
         return render(request, 'Admin/Ingredient.html', {'ingredient': ingredient})
-    
 
 def plan(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
     plans = tbl_plan.objects.all()
     if request.method == "POST":
         tbl_plan.objects.create(
@@ -162,7 +192,7 @@ def plan(request):
         return redirect('Admin:plan')
     else:
         return render(request, 'Admin/Plan.html', {'plans': plans})
-    
+
 def delete_plan(request, id):
     plan = tbl_plan.objects.get(id=id)
     plan.delete()
@@ -179,68 +209,99 @@ def update_plan(request, id):
         return redirect('Admin:plan')
     else:
         return render(request, 'Admin/Plan.html', {'plan': plan})
-    
-def viewcomplaint(request):
-    complaints = tbl_complaint.objects.filter(complaint_status=0)
-    replied= tbl_complaint.objects.filter(complaint_status=1)
-    return render(request, 'Admin/ViewComplaint.html', {'complaints': complaints, 'replied':replied})
 
-def reply(request,id):
+def viewcomplaint(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
+    complaints = tbl_complaint.objects.filter(complaint_status=0)
+    replied = tbl_complaint.objects.filter(complaint_status=1)
+    return render(request, 'Admin/ViewComplaint.html', {'complaints': complaints, 'replied': replied})
+
+def reply(request, id):
     complaint = tbl_complaint.objects.get(id=id)
     if request.method == "POST":
-        complaint.complaint_reply=request.POST.get('complaint_reply')
-        complaint.complaint_status=1
+        complaint.complaint_reply = request.POST.get('complaint_reply')
+        complaint.complaint_status = 1
         complaint.save()
         return redirect('Admin:viewcomplaint')
     else:
         return render(request, 'Admin/Reply.html', {'complaint': complaint})
-    
 
 def users(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
     users = tbl_user.objects.all()
     return render(request, 'Admin/Users.html', {'users': users})
 
 def blockuser(request, id):
     user = tbl_user.objects.get(id=id)
-    user.user_status=2
+    user.user_status = 2
     user.save()
     return redirect('Admin:users')
 
 def unblockuser(request, id):
     user = tbl_user.objects.get(id=id)
-    user.user_status=0
+    user.user_status = 0
     user.save()
     return redirect('Admin:users')
 
 def viewpost(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
     posts = tbl_post.objects.all()
     return render(request, 'Admin/ViewPost.html', {'posts': posts})
 
 def blockpost(request, id):
     post = tbl_post.objects.get(id=id)
-    post.post_status=1
+    post.post_status = 1
     post.save()
     return redirect('Admin:viewpost')
 
 def unblockpost(request, id):
     post = tbl_post.objects.get(id=id)
-    post.post_status=0
+    post.post_status = 0
     post.save()
     return redirect('Admin:viewpost')
 
 def viewdish(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:login')
     dishes = tbl_dish.objects.filter(user__isnull=False)
     return render(request, 'Admin/ViewDish.html', {'dishes': dishes})
 
-
 def blockdish(request, id):
     dish = tbl_dish.objects.get(id=id)
-    dish.dish_status=1
+    dish.dish_status = 1
     dish.save()
     return redirect('Admin:viewdish')
 
 def unblockdish(request, id):
     dish = tbl_dish.objects.get(id=id)
-    dish.dish_status=0
+    dish.dish_status = 0
     dish.save()
     return redirect('Admin:viewdish')
+
+
+def chatpage(request):
+    return render(request, 'Admin/Chat.html')
+
+def ajaxchat(request):
+    if request.method == "POST":
+        msg = request.POST.get('msg', '')
+        file = request.FILES.get('file', None)
+        if msg.strip() or file:
+            tbl_chat.objects.create(
+                chat_content=msg,
+                chat_time=datetime.now(),
+                chat_file=file
+            )
+        return HttpResponse("Message sent")
+    return HttpResponse("Invalid request")
+
+def ajaxchatview(request):
+    chat_data = tbl_chat.objects.all().order_by('chat_time')
+    return render(request, 'Admin/ChatView.html', {'data': chat_data })
+
+def clearchat(request):
+    tbl_chat.objects.all().delete()
+    return HttpResponse("Chat Deleted Successfully...")

@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- <link rel="manifest" href="site.webmanifest"> -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <!-- Place favicon.ico in the root directory -->
 
     <!-- CSS here -->
@@ -35,53 +36,215 @@
 
     <!-- header-start -->
     <header>
-        <div class="header-area ">
-            <div id="sticky-header" class="main-header-area ">
+        <div class="header-area">
+            <div id="sticky-header" class="main-header-area">
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-xl-3 col-lg-2">
                             <div class="logo">
-                                <!-- <a href="{% url 'User:homepage' %}">
-                                    <img src="{% static 'Main/img/logo.png' %}" alt="">
-                                </a> -->
-                                <h3 style="color:white ;">SavourShpere</h3>
+                                <h3 style="color: white;">SavourSphere</h3>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-7">
+                        <div class="col-xl-9 col-lg-10">
                             <div class="main-menu d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a href="{% url 'User:homepage' %}">Home</a></li>
-                                        <li><a href="{% url 'User:profile' %}">Profile</a></li>
-                                        <li><a href="{% url 'User:viewdish' %}">Dishes</a></li>
-                                        <li><a href="{% url 'User:wishlist' %}">Wishlist</a></li>
-                                        <li><a href="{% url 'User:viewplan' %}">View Plans</a></li>
-
-                                        <li><a href="{% url 'User:recommendation' %}">Recommendations</a></li>
-                                        <li><a href="{% url 'User:view_post' %}">View Post</a></li>
-                                        <li><a href="{% url 'User:feedback' %}">Feedback</a></li>
-                                        <li><a href="{% url 'User:logout' %}">Logout</a></li>
-
-                                        {% if status == 1 %}
-                                        <li><a href="{% url 'User:dish' %}">Add Dish</a></li>
-                                        <li><a href="{% url 'User:post' %}">Post</a></li>
-                                        <li><a href="{% url 'User:chatpage' %}">Community</a></li>
-                                        {% endif %}
-
-
+                                        <li><a href="{% url 'User:homepage' %}" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                                        <li><a href="{% url 'User:profile' %}" class="nav-link"><i class="fas fa-user"></i> Profile</a></li>
+                                        <li class="dropdown">
+                                            <a href="#" class="nav-link"><i class="fas fa-utensils"></i> Dishes <i class="fas fa-chevron-down"></i></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{% url 'User:viewdish' %}" class="nav-link">View Dishes</a></li>
+                                                {% if status == 1 %}
+                                                <li><a href="{% url 'User:dish' %}" class="nav-link">Add Dish</a></li>
+                                                {% endif %}
+                                            </ul>
+                                        </li>
+                                        <li><a href="{% url 'User:wishlist' %}" class="nav-link"><i class="fas fa-heart"></i> Wishlist</a></li>
+                                        <li><a href="{% url 'User:viewplan' %}" class="nav-link"><i class="fas fa-calendar-alt"></i> View Plans</a></li>
+                                        <li><a href="{% url 'User:recommendation' %}" class="nav-link"><i class="fas fa-star"></i> Recommendations</a></li>
+                                        <li class="dropdown">
+                                            <a href="#" class="nav-link"><i class="fas fa-comments"></i> Community <i class="fas fa-chevron-down"></i></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{% url 'User:view_post' %}" class="nav-link">View Posts</a></li>
+                                                {% if status == 1 %}
+                                                <li><a href="{% url 'User:post' %}" class="nav-link">Create Post</a></li>
+                                                <li><a href="{% url 'User:chatpage' %}" class="nav-link">Chat</a></li>
+                                                {% endif %}
+                                            </ul>
+                                        </li>
+                                        <li><a href="{% url 'User:feedback' %}" class="nav-link"><i class="fas fa-comment-dots"></i> Feedback</a></li>
+                                        <li><a href="{% url 'User:logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="mobile-menu d-block d-lg-none">
+                                <button class="hamburger"><i class="fas fa-bars"></i></button>
+                                <nav class="mobile-nav">
+                                    <ul>
+                                        <li><a href="{% url 'User:homepage' %}" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                                        <li><a href="{% url 'User:profile' %}" class="nav-link"><i class="fas fa-user"></i> Profile</a></li>
+                                        <li class="mobile-dropdown">
+                                            <a href="#" class="nav-link"><i class="fas fa-utensils"></i> Dishes <i class="fas fa-chevron-down"></i></a>
+                                            <ul class="mobile-dropdown-menu">
+                                                <li><a href="{% url 'User:viewdish' %}" class="nav-link">View Dishes</a></li>
+                                                {% if status == 1 %}
+                                                <li><a href="{% url 'User:dish' %}" class="nav-link">Add Dish</a></li>
+                                                {% endif %}
+                                            </ul>
+                                        </li>
+                                        <li><a href="{% url 'User:wishlist' %}" class="nav-link"><i class="fas fa-heart"></i> Wishlist</a></li>
+                                        <li><a href="{% url 'User:viewplan' %}" class="nav-link"><i class="fas fa-calendar-alt"></i> View Plans</a></li>
+                                        <li><a href="{% url 'User:recommendation' %}" class="nav-link"><i class="fas fa-star"></i> Recommendations</a></li>
+                                        <li class="mobile-dropdown">
+                                            <a href="#" class="nav-link"><i class="fas fa-comments"></i> Community <i class="fas fa-chevron-down"></i></a>
+                                            <ul class="mobile-dropdown-menu">
+                                                <li><a href="{% url 'User:view_post' %}" class="nav-link">View Posts</a></li>
+                                                {% if status == 1 %}
+                                                <li><a href="{% url 'User:post' %}" class="nav-link">Create Post</a></li>
+                                                <li><a href="{% url 'User:chatpage' %}" class="nav-link">Chat</a></li>
+                                                {% endif %}
+                                            </ul>
+                                        </li>
+                                        <li><a href="{% url 'User:feedback' %}" class="nav-link"><i class="fas fa-comment-dots"></i> Feedback</a></li>
+                                        <li><a href="{% url 'User:logout' %}" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                                     </ul>
                                 </nav>
                             </div>
                         </div>
-
-                        <div class="col-12">
-                            <div class="mobile_menu d-block d-lg-none"></div>
-                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
+    
+        <!-- Font Awesome for Icons -->
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+        <style>
+           
+            .logo h3 {
+                margin: 0;
+                font-size: 24px;
+                font-weight: bold;
+            }
+            .main-menu nav ul#navigation {
+                display: flex;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            .main-menu nav ul#navigation li {
+                position: relative;
+                margin-right: 20px;
+            }
+            .nav-link {
+                color: white !important;
+                text-decoration: none;
+                font-size: 16px;
+                padding: 10px 15px;
+                display: flex;
+                align-items: center;
+                transition: background-color 0.3s;
+            }
+            .nav-link i {
+                margin-right: 8px;
+            }
+            .nav-link:hover {
+                background-color: #34495e;
+                border-radius: 5px;
+            }
+            .dropdown {
+                position: relative;
+            }
+            .dropdown-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: #34495e;
+                list-style: none;
+                padding: 10px 0;
+                margin: 0;
+                min-width: 200px;
+                border-radius: 5px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            .dropdown:hover .dropdown-menu {
+                display: block;
+            }
+            .dropdown-menu li {
+                margin: 0;
+            }
+            .dropdown-menu .nav-link {
+                padding: 10px 20px;
+            }
+            .mobile-menu {
+                text-align: right;
+            }
+            .hamburger {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+            }
+            .mobile-nav {
+                display: none;
+                background-color: #34495e;
+                padding: 20px;
+                position: absolute;
+                top: 70px;
+                right: 0;
+                width: 100%;
+                z-index: 999;
+            }
+            .mobile-nav ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .mobile-nav ul li {
+                margin-bottom: 10px;
+            }
+            .mobile-nav .nav-link {
+                color: white;
+                font-size: 18px;
+            }
+            .mobile-dropdown .mobile-dropdown-menu {
+                display: none;
+                padding-left: 20px;
+            }
+            .mobile-dropdown.active .mobile-dropdown-menu {
+                display: block;
+            }
+            .mobile-nav.active {
+                display: block;
+            }
+            @media (min-width: 992px) {
+                .mobile-menu {
+                    display: none;
+                }
+            }
+        </style>
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const hamburger = document.querySelector('.hamburger');
+                const mobileNav = document.querySelector('.mobile-nav');
+                const mobileDropdowns = document.querySelectorAll('.mobile-dropdown');
+    
+                hamburger.addEventListener('click', () => {
+                    mobileNav.classList.toggle('active');
+                });
+    
+                mobileDropdowns.forEach(dropdown => {
+                    dropdown.querySelector('a').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        dropdown.classList.toggle('active');
+                    });
+                });
+            });
+        </script>
     <!-- header-end -->
 
     <!-- slider_area_start -->
@@ -152,83 +315,8 @@
     <!-- dish_area start  -->
 
 
-    <!-- footer  -->
     <footer class="footer">
-        <div class="footer_top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-2 col-md-6 col-lg-2">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">
-                                Top Products
-                            </h3>
-                            <ul>
-                                <li><a href="#">Managed Website</a></li>
-                                <li><a href="#"> Manage Reputation</a></li>
-                                <li><a href="#">Power Tools</a></li>
-                                <li><a href="#">Marketing Service</a></li>
-                            </ul>
-
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-md-6 col-lg-2">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">
-                                Quick Links
-                            </h3>
-                            <ul>
-                                <li><a href="#">Jobs</a></li>
-                                <li><a href="#">Brand Assets</a></li>
-                                <li><a href="#">Investor Relations</a></li>
-                                <li><a href="#">Terms of Service</a></li>
-                            </ul>
-
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-md-6 col-lg-2">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">
-                                Features
-                            </h3>
-                            <ul>
-                                <li><a href="#">Jobs</a></li>
-                                <li><a href="#">Brand Assets</a></li>
-                                <li><a href="#">Investor Relations</a></li>
-                                <li><a href="#">Terms of Service</a></li>
-                            </ul>
-
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-md-6 col-lg-2">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">
-                                Resources
-                            </h3>
-                            <ul>
-                                <li><a href="#">Guides</a></li>
-                                <li><a href="#">Research</a></li>
-                                <li><a href="#">Experts</a></li>
-                                <li><a href="#">Agencies</a></li>
-                            </ul>
-
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-6 col-lg-4">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">
-                                Subscribe
-                            </h3>
-                            <p class="newsletter_text">You can trust us. we only send promo offers,</p>
-                            <form action="#" class="newsletter_form">
-                                <input type="text" placeholder="Enter your mail">
-                                <button type="submit"> <i class="ti-arrow-right"></i> </button>
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <div class="copy-right_text">
             <div class="container">
                 <div class="footer_border"></div>
@@ -239,7 +327,7 @@
                             Copyright &copy;
                             <script>document.write(new Date().getFullYear());</script> All rights reserved | This
                             template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
-                                href="https://colorlib.com" target="_blank">Colorlib</a>
+                                href="#" target="_blank">SavourShpere</a>
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         </p>
                     </div>

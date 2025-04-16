@@ -65,7 +65,7 @@ class tbl_chat(models.Model):
     chat_content = models.CharField(max_length=500)
     chat_time = models.DateTimeField()
     chat_file = models.FileField(upload_to='ChatFiles/')
-    user_from = models.ForeignKey(tbl_user,on_delete=models.CASCADE,related_name="user_from")
+    user_from = models.ForeignKey(tbl_user,on_delete=models.CASCADE,related_name="user_from",null=True, blank=True)
 
 class tbl_rating(models.Model):
     rating_data=models.IntegerField()
